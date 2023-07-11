@@ -52,16 +52,11 @@
 (defn hex-out
   [a b c d e &opt dbg]
   (default dbg false)
-  (if-not dbg
-    # a, b, c, d, e have 32-bit be content
-    (-> (seq [w :in [a b c d e]]
-          # left pad with 0 if needed, want total of 8 chars per
-          (string/format "%08x" w))
-        (string/join ""))
-    (-> (seq [w :in [a b c d e]]
-          # left pad with 0 if needed, want total of 8 chars per
-          (string/format "%08x" w))
-        (string/join " "))))
+  # a, b, c, d, e have 32-bit be content
+  (-> (seq [w :in [a b c d e]]
+        # left pad with 0 if needed, want total of 8 chars per
+        (string/format "%08x" w))
+      (string/join (if dbg " " ""))))
 
 (defn sha-1
   [message]
