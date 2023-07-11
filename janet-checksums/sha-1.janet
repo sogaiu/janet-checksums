@@ -7,6 +7,7 @@
 
 (def bits-per-byte 8)
 
+# 2^30 times the square roots of 2, 3, 5 and 10.
 (def k-tbl
   (array/concat @[]
                 (array/new-filled 20 0x5a827999)
