@@ -7,13 +7,18 @@
 
 (def bits-per-byte 8)
 
+(defn make-constant
+  [n]
+  (scan-number (string/format "0x%08x"
+                              (math/trunc (* (math/exp2 30) (math/sqrt n))))))
+
 # 2^30 times the square roots of 2, 3, 5 and 10.
 (def k-tbl
   (array/concat @[]
-                (array/new-filled 20 0x5a827999)
-                (array/new-filled 20 0x6ed9eba1)
-                (array/new-filled 20 0x8f1bbcdc)
-                (array/new-filled 20 0xca62c1d6)))
+                (array/new-filled 20 (make-constant 2))
+                (array/new-filled 20 (make-constant 3))
+                (array/new-filled 20 (make-constant 5))
+                (array/new-filled 20 (make-constant 10))))
 
 # md5 and sha-1 do this differently because of le vs be
 (defn length-as-bytes
