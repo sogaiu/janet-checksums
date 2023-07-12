@@ -312,3 +312,57 @@
 
   )
 
+(defn sha-224
+  [message]
+  # the second 32-bits of the fractional parts of the square roots of
+  # the 9th through 16th prime numbers.  n.b. that the constants are
+  # arrived at in this fashion is not mentioned in the rfc nor in fips
+  # 180-4
+  (def init-hash-val
+    # unclear how to compute these using janet's primitives.  the
+    # first 32-bits can be obtained via operations on int/u64 numbers
+    # but the tail ends of the second 32-bits might not be available
+    # in a straight-forward fashion.  this is because the direct
+    # initial computation involves arriving at "the factional parts of
+    # the square roots of ... prime numbers" and then truncating.
+    [(int/u64 "0xc1059ed8")
+     (int/u64 "0x367cd507")
+     (int/u64 "0x3070dd17")
+     (int/u64 "0xf70e5939")
+     (int/u64 "0xffc00b31")
+     (int/u64 "0x68581511")
+     (int/u64 "0x64f98fa7")
+     (int/u64 "0xbefa4fa4")])
+
+  (def res-bytes
+    (sha-2-32 init-hash-val message))
+
+  (array/pop res-bytes)
+
+  (hex-out res-bytes))
+
+(comment
+
+  (sha-224 "abc")
+  # =>
+  "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7"
+
+  (sha-224 "abcde")
+  # =>
+  "bdd03d560993e675516ba5a50638b6531ac2ac3d5847c61916cfced6"
+
+  (sha-224 "abcdbcdecdefdefgefghfghighijhi")
+  # =>
+  "92c9be409b247f582a829a5717fc67e233e003ed7ba6f892e9358f01"
+
+  (sha-224 "jkijkljklmklmnlmnomnopnopq")
+  # =>
+  "cae09129d828d03f60ce06115346a7e281cdb198ec61fff40b9ba1db"
+
+  (sha-224 (string "abcdbcdecdefdefgefghfghighijhi"
+                   "jkijkljklmklmnlmnomnopnopq"))
+  # =>
+  "75388b16512776cc5dba5da1fd890150b0c6455cb4f58b1952522525"
+
+  )
+
