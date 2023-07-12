@@ -80,16 +80,16 @@
   )
 
 (defn hex-out
-  [a b c d e f g h &opt dbg]
+  [words &opt dbg]
   (default dbg false)
-  # a, b, c, d, e, f, g, h have 32-bit be content
-  (-> (seq [w :in [a b c d e f g h]]
+  # each element of words has 32-bit be content
+  (-> (seq [w :in words]
         # left pad with 0 if needed, want total of 8 chars per
         (string/format "%08x" w))
       (string/join (if dbg " " ""))))
 
-(defn sha-256
-  [message]
+(defn sha-2-32
+  [init-hash-val message]
   (u/deprintf "\nmessage: %s" message)
 
   (def msg-len-in-bits
@@ -201,13 +201,7 @@
       (def buf (buffer/slice padded-msg start-idx end-idx))
       (u/encode-as-be buf)))
 
-  (var [h0 h1 h2 h3 h4 h5 h6 h7]
-    (seq [i :range [0 8]
-          :let [sr (math/sqrt (get some-primes i))]]
-      (->> (- sr (math/trunc sr))
-           (* (math/exp2 32))
-           math/trunc
-           int/u64)))
+  (var [h0 h1 h2 h3 h4 h5 h6 h7] init-hash-val)
 
   (var [a b c d e f g h] [nil nil nil nil nil nil nil nil])
 
@@ -259,7 +253,7 @@
 
       (u/deprintf
         (string/format "b: %d t: %02d ABCDEFGH: %s"
-                       i t (hex-out a b c d e f g h true))))
+                       i t (hex-out [a b c d e f g h] true))))
 
     (set h0 (uint32/plus h0 a))
     (set h1 (uint32/plus h1 b))
@@ -272,11 +266,26 @@
 
     (u/deprintf
       (string/format "end of block: %d H0 H1 H2 H3 H4 H5 H6 H7: %s"
-                     i (hex-out h0 h1 h2 h3 h4 h5 h6 h7 true)))
+                     i (hex-out [h0 h1 h2 h3 h4 h5 h6 h7] true)))
 
     )
 
-  (hex-out h0 h1 h2 h3 h4 h5 h6 h7))
+  @[h0 h1 h2 h3 h4 h5 h6 h7])
+
+(defn sha-256
+  [message]
+  (def init-hash-val
+    (seq [i :range [0 8]
+          :let [sr (math/sqrt (get some-primes i))]]
+      (->> (- sr (math/trunc sr))
+           (* (math/exp2 32))
+           math/trunc
+           int/u64)))
+
+  (def res-bytes
+    (sha-2-32 init-hash-val message))
+
+  (hex-out res-bytes))
 
 (comment
 
