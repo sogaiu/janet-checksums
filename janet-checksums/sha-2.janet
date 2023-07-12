@@ -665,3 +665,54 @@
 
   )
 
+(defn sha-384
+  [message]
+  (def init-hash-val
+    [(int/u64 "0xcbbb9d5dc1059ed8")
+     (int/u64 "0x629a292a367cd507")
+     (int/u64 "0x9159015a3070dd17")
+     (int/u64 "0x152fecd8f70e5939")
+     (int/u64 "0x67332667ffc00b31")
+     (int/u64 "0x8eb44a8768581511")
+     (int/u64 "0xdb0c2e0d64f98fa7")
+     (int/u64 "0x47b5481dbefa4fa4")])
+
+  (def res-bytes
+    (sha-2-64 init-hash-val message))
+
+  (array/pop res-bytes)
+
+  (array/pop res-bytes)
+
+  (hex-out-16 res-bytes))
+
+(comment
+
+  (sha-384 "abc")
+  # =>
+  (string "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded163"
+          "1a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7")
+
+  (sha-384 "abcde")
+  # =>
+  (string "4c525cbeac729eaf4b4665815bc5db0c84fe6300068a727c"
+          "f74e2813521565abc0ec57a37ee4d8be89d097c0d2ad52f0")
+
+  (sha-384 "abcdbcdecdefdefgefghfghighijhi")
+  # =>
+  (string "0eb6af2176a0934e1177b9ac961fb6ad62abbd301db9027f"
+          "3a627c276ad7d6a028343233863a25e01e1b80ffb2d1f2a4")
+
+  (sha-384 "jkijkljklmklmnlmnomnopnopq")
+  # =>
+  (string "4bd7b05260ddb6a61e55b8db2034af1c1e0c30c67cd26ccd"
+          "61df3452f15b1a7a0b0702f06c922fd2eca30022685f6232")
+
+  (sha-384 (string "abcdbcdecdefdefgefghfghighijhi"
+                   "jkijkljklmklmnlmnomnopnopq"))
+  # =>
+  (string "3391fdddfc8dc7393707a65b1b4709397cf8b1d162af05ab"
+          "fe8f450de5f36bc6b0455a8520bc4e6f5fe95b1fe3c8452b")
+
+  )
+
