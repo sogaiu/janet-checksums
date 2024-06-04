@@ -128,7 +128,7 @@
           (string/format "%08x" w))
         (string/join " "))))
 
-(defn md5
+(defn md5-raw
   [message]
   (u/deprintf "\nmessage: %s" message)
 
@@ -300,7 +300,11 @@
 
     )
 
-  (hex-out a b c d))
+  [a b c d])
+
+(defn md5
+  [message]
+  (hex-out ;(md5-raw message)))
 
 (comment
 

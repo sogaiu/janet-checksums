@@ -58,7 +58,7 @@
         (string/format "%08x" w))
       (string/join (if dbg " " ""))))
 
-(defn sha-1
+(defn sha-1-raw
   [message]
   (u/deprintf "\nmessage: %s" message)
 
@@ -217,7 +217,27 @@
 
     )
 
-  (hex-out h0 h1 h2 h3 h4))
+  [h0 h1 h2 h3 h4])
+
+(comment
+
+  (sha-1-raw "abc")
+  # =>
+  [(int/u64 "2845392438") (int/u64 "1191608682") 
+   (int/u64 "3124634993") (int/u64 "2018558572") 
+   (int/u64 "2630932637")]
+
+  (hex-out (int/u64 "2845392438") (int/u64 "1191608682") 
+           (int/u64 "3124634993") (int/u64 "2018558572") 
+           (int/u64 "2630932637"))
+  # =>
+  "a9993e364706816aba3e25717850c26c9cd0d89d"
+
+  )
+
+(defn sha-1
+  [message]
+  (hex-out ;(sha-1-raw message)))
 
 (comment
 

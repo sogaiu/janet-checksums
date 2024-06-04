@@ -273,7 +273,7 @@
 
   @[h0 h1 h2 h3 h4 h5 h6 h7])
 
-(defn sha-256
+(defn sha-256-raw
   [message]
   (def init-hash-val
     (seq [i :range [0 8]
@@ -286,7 +286,11 @@
   (def res-bytes
     (sha-2-32 init-hash-val message))
 
-  (hex-out-8 res-bytes))
+  res-bytes)
+
+(defn sha-256
+  [message]
+  (hex-out-8 (sha-256-raw message)))
 
 (comment
 
@@ -313,7 +317,7 @@
 
   )
 
-(defn sha-224
+(defn sha-224-raw
   [message]
   # the second 32-bits of the fractional parts of the square roots of
   # the 9th through 16th prime numbers.  n.b. that the constants are
@@ -340,7 +344,11 @@
 
   (array/pop res-bytes)
 
-  (hex-out-8 res-bytes))
+  res-bytes)
+
+(defn sha-224
+  [message]
+  (hex-out-8 (sha-224-raw message)))
 
 (comment
 
@@ -618,7 +626,7 @@
 
   @[h0 h1 h2 h3 h4 h5 h6 h7])
 
-(defn sha-512
+(defn sha-512-raw
   [message]
   (def init-hash-val
     [(int/u64 "0x6a09e667f3bcc908")
@@ -633,7 +641,11 @@
   (def res-bytes
     (sha-2-64 init-hash-val message))
 
-  (hex-out-16 res-bytes))
+  res-bytes)
+
+(defn sha-512
+  [message]
+  (hex-out-16 (sha-512-raw message)))
 
 (comment
 
@@ -665,7 +677,7 @@
 
   )
 
-(defn sha-384
+(defn sha-384-raw
   [message]
   (def init-hash-val
     [(int/u64 "0xcbbb9d5dc1059ed8")
@@ -684,7 +696,11 @@
 
   (array/pop res-bytes)
 
-  (hex-out-16 res-bytes))
+  res-bytes)
+
+(defn sha-384
+  [message]
+  (hex-out-16 (sha-384-raw message)))
 
 (comment
 
