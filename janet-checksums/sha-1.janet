@@ -223,12 +223,12 @@
 
   (sha-1-raw "abc")
   # =>
-  [(int/u64 "2845392438") (int/u64 "1191608682") 
-   (int/u64 "3124634993") (int/u64 "2018558572") 
+  [(int/u64 "2845392438") (int/u64 "1191608682")
+   (int/u64 "3124634993") (int/u64 "2018558572")
    (int/u64 "2630932637")]
 
-  (hex-out (int/u64 "2845392438") (int/u64 "1191608682") 
-           (int/u64 "3124634993") (int/u64 "2018558572") 
+  (hex-out (int/u64 "2845392438") (int/u64 "1191608682")
+           (int/u64 "3124634993") (int/u64 "2018558572")
            (int/u64 "2630932637"))
   # =>
   "a9993e364706816aba3e25717850c26c9cd0d89d"
@@ -264,3 +264,53 @@
 
   )
 
+(defn raw-to-bytes
+  [raw]
+  (def buf @"")
+  (each item raw
+    (def bytes (int/to-bytes item))
+    # the rightmost 4 bytes are always zero, ignore
+    # also...big endian, so order reversed
+    (buffer/push buf
+                 (get bytes 3)
+                 (get bytes 2)
+                 (get bytes 1)
+                 (get bytes 0)))
+  #
+  buf)
+
+(comment
+
+  (raw-to-bytes (sha-1-raw "abc"))
+  # =>
+  @"\xA9\x99>6G\x06\x81j\xBA>%qxP\xC2l\x9C\xD0\xD8\x9D"
+
+  (raw-to-bytes [(int/u64 "2845392438") (int/u64 "1191608682")
+                 (int/u64 "3124634993") (int/u64 "2018558572")
+                 (int/u64 "2630932637")])
+  # =>
+  @"\xA9\x99>6G\x06\x81j\xBA>%qxP\xC2l\x9C\xD0\xD8\x9D"
+
+  (map int/to-bytes [(int/u64 "2845392438") (int/u64 "1191608682")
+                     (int/u64 "3124634993") (int/u64 "2018558572")
+                     (int/u64 "2630932637")])
+  # =>
+  @[@"6>\x99\xA9\0\0\0\0"
+    @"j\x81\x06G\0\0\0\0"
+    @"q%>\xBA\0\0\0\0"
+    @"l\xC2Px\0\0\0\0"
+    @"\x9D\xD8\xD0\x9C\0\0\0\0"]
+
+  )
+
+(defn sha-1-bytes
+  [message]
+  (raw-to-bytes (sha-1-raw message)))
+
+(comment
+
+  (sha-1-bytes "abc")
+  # =>
+  @"\xA9\x99>6G\x06\x81j\xBA>%qxP\xC2l\x9C\xD0\xD8\x9D"
+
+  )
