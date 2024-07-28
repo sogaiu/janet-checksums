@@ -100,15 +100,19 @@ Some directories are skipped in this process of searching for usages
 
 Some repositories that use this method include:
 
-* [janet-jsonish](https://github.com/sogaiu/janet-totp "JSON <-> JDN
+* [janet-checksums](https://github.com/sogaiu/janet-checksums "Some
+  digest functions in Janet")
+* [janet-jsonish](https://github.com/sogaiu/janet-jsonish "JSON <-> JDN
   Converter in Pure Janet")
 * [janet-punyishcode](https://github.com/sogaiu/janet-totp "Punycode
   decoding / encoding in Janet")
+* [janet-tempdir](https://github.com/sogaiu/janet-tempdir "Some temp
+  dir creation bits for Janet")
 * [janet-totp](https://github.com/sogaiu/janet-totp "TOTP in Janet")
 * [janet-zipper](https://github.com/sogaiu/janet-zipper "Zippers in
   Janet")
-* [simple-peg-tracer](https://github.com/sogaiu/simple-peg-tracer
-  "Simple Janet PEG tracer")
+* [small-peg-tracer](https://github.com/sogaiu/small-peg-tracer
+  "Small Janet PEG tracer")
 
 [*] If you chose a subdirectory name other than `juat`, the path will
 likely need to be edited to match.
