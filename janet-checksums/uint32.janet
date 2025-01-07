@@ -67,7 +67,8 @@
 
   (= (plus (int/u64 "0xFF_FF_FF_FF") (int/u64 1) (int/u64 1))
      (int/u64 1))
-  # => true
+  # =>
+  true
 
   )
 
