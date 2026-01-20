@@ -1,7 +1,12 @@
 (defn deprintf
   [fmt & args]
   (when (os/getenv "VERBOSE")
-    (eprintf fmt ;args)))
+    (if (and (string/find "%s" fmt)
+             (some |(string/find "\x00" $) args))
+      (eprint (string "WARNING: "
+                      "skipping output as `%s` conversion spec "
+                      "and zero byte detected"))
+      (eprintf fmt ;args))))
 
 # only works up through 8 bytes
 (defn encode-as-le
