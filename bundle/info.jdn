@@ -1,0 +1,23 @@
+{:name "janet-checksums"
+ :url "https://github.com/sogaiu/janet-checksums"
+ :repo "git+https://github.com/sogaiu/janet-checksums"
+
+ :vendored
+ [{:name "some-bundle-bits"
+   :url "https://github.com/sogaiu/some-bundle-bits"
+   :tag "7ddb7ec53a6eb8c81b0c22bb7710a01fff57a759"
+   :paths [["sbb.janet" "bundle/"]]}
+  {:name "niche"
+   :url "https://github.com/sogaiu/niche"
+   :tag "3f744cfb02b472971f82e78f16a027908a4bd717"
+   :paths [["niche.janet" "bin/"]]}]
+
+ :sources
+ [{:prefix "janet-checksums"
+   :items [["janet-checksums/md5.janet" "md5.janet"]
+           ["janet-checksums/sha-1.janet" "sha-1.janet"]
+           ["janet-checksums/sha-2.janet" "sha-2.janet"]
+           ["janet-checksums/uint32.janet" "uint32.janet"]
+           ["janet-checksums/uint64.janet" "uint64.janet"]
+           ["janet-checksums/utils.janet" "utils.janet"]]}]}
+
